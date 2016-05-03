@@ -3,8 +3,10 @@ Service for publishing minimesos containers via mdns
 
 # Usage
 
-`$ npm install`
-`$ ./minimesos-mdns`
+```
+$ npm install
+$ ./minimesos-mdns
+```
 
 Now start a minimesos cluster. Their containers will be registered with Avahi.
 
