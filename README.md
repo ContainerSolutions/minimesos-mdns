@@ -30,8 +30,6 @@ and they can be accessed via their .local address.
 ```
 $ curl -s agent.mycluster.local:5051/state.json | jq .version
 "0.25.0"
-$ curl -s agent.mycluster.local:5051/state.json | jq .version
-"0.25.0"
 $ curl -s master.mycluster.local:5050/state.json | jq .version
 "0.25.0"
 $ ping -c 1 zookeeper.mycluster.local
