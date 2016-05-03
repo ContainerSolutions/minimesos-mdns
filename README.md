@@ -28,10 +28,7 @@ Publishing marathon.mycluster.local as 172.17.0.6
 and they can be accessed via their .local address.
 
 ```
-$ curl agent.mycluster.local:5051/state.json | jq .version
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-100  2149  100  2149    0     0   115k      0 --:--:-- --:--:-- --:--:--  123k
+$ curl -s agent.mycluster.local:5051/state.json | jq .version
 "0.25.0"
 $ curl -s agent.mycluster.local:5051/state.json | jq .version
 "0.25.0"
