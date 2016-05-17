@@ -5,7 +5,7 @@ Service for publishing minimesos containers via mdns
 
 ```
 $ npm install
-$ ./minimesos-mdns
+$ ./minimesos-mdns.js
 ```
 
 Now start a minimesos cluster in a separate terminal.
