@@ -3,7 +3,8 @@
 var Dockerode = require('dockerode');
 var DockerEvents = require('docker-events');
 var dockerode = new Dockerode();
-var Registrator = require('./mdns-registrator.js')
+var Registrator = require('./registrator.js');
+var registrator = new Registrator();
 
 var emitter = new DockerEvents({
 	docker: dockerode
@@ -28,7 +29,7 @@ emitter.on("start", function (message) {
 						var parts = name.split("-");
 						var role = parts[1];
 						var hostName = role + ".mycluster.local";
-						Registrator.registerHost(name, hostName, ipAddress);
+						registrator.registerHost(name, hostName, ipAddress);
 					}
 				});
 			}
