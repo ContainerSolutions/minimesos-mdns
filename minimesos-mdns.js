@@ -1,9 +1,9 @@
 #!/usr/local/bin/node
 
-var exec = require('child_process').exec;
 var Dockerode = require('dockerode');
 var DockerEvents = require('docker-events');
 var dockerode = new Dockerode();
+var Registrator = require('./mdns-registrator.js')
 
 var emitter = new DockerEvents({
 	docker: dockerode
@@ -24,17 +24,12 @@ emitter.on("start", function (message) {
 
 				container.inspect(function (err, data) {
 					var ipAddress = data.NetworkSettings.IPAddress;
-					var parts = name.split("-");
-					var role = parts[1];
-					var command = "avahi-publish -a " + role + ".mycluster.local " + ipAddress;
-					console.log("Publishing " + role + ".mycluster.local as " + ipAddress);
-					exec(command, function (error, stdout, stderr) {
-						console.log('stdout: ' + stdout);
-						console.log('stderr: ' + stderr);
-						if (error !== null) {
-							console.log("Could not publish IP address " + ipAddress + " of container: " + message.Actor.Attributes.name + ": " + error);
-						}
-					});
+					if (ipAddress) {
+						var parts = name.split("-");
+						var role = parts[1];
+						var hostName = role + ".mycluster.local";
+						Registrator.registerHost(name, hostName, ipAddress);
+					}
 				});
 			}
 		}
