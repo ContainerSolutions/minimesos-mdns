@@ -3,8 +3,7 @@
 var exec = require('child_process').exec;
 var Dockerode = require('dockerode');
 var DockerEvents = require('docker-events');
-var options = {socketPath: '/var/run/docker.sock'};
-var dockerode = new Dockerode(options);
+var dockerode = new Dockerode();
 
 var emitter = new DockerEvents({
 	docker: dockerode
