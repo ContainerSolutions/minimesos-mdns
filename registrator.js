@@ -5,6 +5,8 @@ var exec = require('child_process').exec;
 
 var Registrator = function () {
 
+	var childProcesses = {}; //maps container ids to the dns-sd/avahi child proces
+
 	var createCommand = function (container, hostName, ip) {
 		if (os.platform() === 'darwin') {
 			return "dns-sd -P " + container + " _http._tcp \"\" 1111 " + hostName + " " + ip;
@@ -13,17 +15,29 @@ var Registrator = function () {
 		}
 	};
 
+	var killChild = function (container) {
+		console.log("Unregistering process for container " + container);
+		childProcesses[container].kill();
+		delete childProcesses[container];
+	};
+
 	return {
-		registerHost: function (container, hostName, ip) {
+		registerContainer: function (container, hostName, ip) {
 			console.log("Publishing container " + container + " on ip " + ip + " with hostname: " + hostName);
 			var command = createCommand(container, hostName, ip);
-			exec(command, function (error, stdout, stderr) {
-				console.log('stdout: ' + stdout);
-				console.log('stderr: ' + stderr);
-				if (error !== null) {
-					console.log("Could not publish IP address " + ip + " of container: " + container + ": " + error + "\n\tcommand=" + command);
-				}
-			});
+			childProcesses[container] = exec(command);
+		},
+
+		unregisterContainer: function (container) {
+			if (container in childProcesses) {
+				killChild(container);
+			}
+		},
+
+		unregisterAllContainers: function () {
+			for (var container in childProcesses) {
+				killChild(container);
+			}
 		}
 	}
 
